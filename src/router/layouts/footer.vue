@@ -1,6 +1,6 @@
 <template>
   <footer class="container">
-    <p>© Company 2017-2019</p>
+    <p>© Saleforce Vue Integration {{ new Date().getFullYear() }} </p>
   </footer>
 </template>
 
