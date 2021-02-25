@@ -3,7 +3,6 @@ import App from './App'
 import router from '@router'
 import store from '@state/store'
 
-import 'bootstrap'
 import './globalComponents'
 import vuetify from './plugins/vuetify';
 // import '@babel/polyfill'
