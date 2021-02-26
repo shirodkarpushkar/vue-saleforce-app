@@ -50,7 +50,7 @@ export default {
   },
   async created() {
     await this.getRecords()
-    // this.subscribeEvents()
+    this.subscribeEvents()
   },
   methods: {
     async getRecords() {
@@ -61,19 +61,16 @@ export default {
       this.records = res.records
     },
     subscribeEvents() {
-      this.$jsforce.browser.connection.streaming
-        .topic('StudentUpdates')
-        .subscribe((message) => {
-          console.log('Event Type : ' + message.event.type)
-          console.log('Event Created : ' + message.event.createdDate)
-          console.log('Object Id : ' + message.sobject.Id)
-        })
+      this.$jsforce.browser.on('connect', (conn) => {
+        this.getRecords()
+      })
     },
     authorise() {
       this.$jsforce.browser.login()
     },
-    logout() {
-      this.$jsforce.browser.logout()
+    async logout() {
+      await this.$jsforce.browser.logout()
+      await this.getRecords()
     },
   },
 }
