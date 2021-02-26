@@ -5,11 +5,21 @@
       <v-btn class="mr-1" @click="authorise">Authorize</v-btn>
       <v-btn @click="logout">Logout</v-btn>
 
-      <v-data-table
-        :headers="headers"
-        :items="records"
-        class="elevation-1"
-      ></v-data-table>
+      <v-data-table :headers="headers" :items="records" class="elevation-1">
+        <template v-slot:item.Name="{ item }">
+          <div>
+            <router-link
+              :to="{
+                name: 'studentDetails',
+                params: {
+                  id: item.Id,
+                },
+              }"
+              >{{ item.Name }}</router-link
+            >
+          </div>
+        </template>
+      </v-data-table>
     </v-container>
 
     <app-footer></app-footer>
@@ -17,8 +27,6 @@
 </template>
 
 <script>
-import jsforce from 'jsforce'
-
 export default {
   page: {
     title: 'Home',
@@ -28,10 +36,6 @@ export default {
   data() {
     return {
       headers: [
-        {
-          text: 'ID',
-          value: 'Id',
-        },
         {
           text: 'Record',
           value: 'Name',
@@ -44,32 +48,32 @@ export default {
       records: [],
     }
   },
-  mounted() {
-    this.initialise()
+  async created() {
+    await this.getRecords()
+    // this.subscribeEvents()
   },
   methods: {
-    initialise() {
-      jsforce.browser.init({
-        clientId:
-          '3MVG9fe4g9fhX0E6PXk.Rnb9BpGHna9PukWmKSwNNJe2knVk8StZJIM7ug8Un_REJyi99g95.EHd1zU2aUjso',
-        redirectUri: 'http://localhost:8080',
-        version: '49.0',
-      })
-      this.subcribeEvents()
+    async getRecords() {
+      const res = await this.$jsforce.browser.connection.query(
+        'select Id, Name, Student_Name__c from Student__c'
+      )
+
+      this.records = res.records
+    },
+    subscribeEvents() {
+      this.$jsforce.browser.connection.streaming
+        .topic('StudentUpdates')
+        .subscribe((message) => {
+          console.log('Event Type : ' + message.event.type)
+          console.log('Event Created : ' + message.event.createdDate)
+          console.log('Object Id : ' + message.sobject.Id)
+        })
     },
     authorise() {
-      jsforce.browser.login()
+      this.$jsforce.browser.login()
     },
     logout() {
-      jsforce.browser.logout()
-    },
-    subcribeEvents() {
-      jsforce.browser.on('connect', async (conn) => {
-        const response = await conn.query(
-          'SELECT Id, Name,Student_Name__c FROM Student__c'
-        )
-        this.records = response.records
-      })
+      this.$jsforce.browser.logout()
     },
   },
 }

@@ -5,10 +5,14 @@ import store from '@state/store'
 
 import './globalComponents'
 import vuetify from './plugins/vuetify';
+import jsforce from './plugins/salesforce';
+
+
 // import '@babel/polyfill'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 
+Vue.prototype.$jsforce = jsforce
 
 
 // Don't warn about using the dev version of Vue in development.

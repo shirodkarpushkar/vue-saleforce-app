@@ -12,6 +12,12 @@ export default [
     component: () => lazyLoadView(import('@views/home')),
 
   },
+  {
+    path: '/student/:id',
+    name: 'studentDetails',
+    component: () => lazyLoadView(import('@views/details')),
+
+  },
   /* name has different to reuse the same component */
 
   {
