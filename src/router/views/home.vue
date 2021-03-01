@@ -55,7 +55,7 @@ export default {
   methods: {
     async getRecords() {
       const res = await this.$jsforce.browser.connection.query(
-        'select Id, Name, Student_Name__c from Student__c'
+        'select Id, Name, Student_Name__c from Student__c order by Id DESC'
       )
 
       this.records = res.records
