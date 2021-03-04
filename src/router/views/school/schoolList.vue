@@ -2,15 +2,13 @@
   <div>
     <navbar></navbar>
     <v-container>
-      <v-btn class="mr-1" @click="authorise">Authorize</v-btn>
-      <v-btn @click="logout">Logout</v-btn>
 
       <v-data-table :headers="headers" :items="records" class="elevation-1">
         <template v-slot:item.Name="{ item }">
           <div>
             <router-link
               :to="{
-                name: 'studentDetails',
+                name: 'schoolDetails',
                 params: {
                   id: item.Id,
                 },
@@ -29,20 +27,20 @@
 <script>
 export default {
   page: {
-    title: 'Home',
-    meta: [{ name: 'description', content: 'Home' }],
+    title: 'SchoolList',
+    meta: [{ name: 'description', content: 'StudentList' }],
   },
   components: {},
   data() {
     return {
       headers: [
         {
-          text: 'Record',
-          value: 'Name',
+          text: 'Id',
+          value: 'Id',
         },
         {
           text: 'Name',
-          value: 'Student_Name__c',
+          value: 'Name',
         },
       ],
       records: [],
@@ -55,7 +53,7 @@ export default {
   methods: {
     async getRecords() {
       const res = await this.$jsforce.browser.connection.query(
-        'select Id, Name, Student_Name__c from Student__c order by Id DESC'
+        'select Id, Name from School__c order by Id DESC'
       )
 
       this.records = res.records
@@ -65,13 +63,7 @@ export default {
         this.getRecords()
       })
     },
-    authorise() {
-      this.$jsforce.browser.login()
-    },
-    async logout() {
-      await this.$jsforce.browser.logout()
-      await this.getRecords()
-    },
+
   },
 }
 </script>

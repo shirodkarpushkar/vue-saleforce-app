@@ -1,8 +1,14 @@
 <template>
   <div>
     <navbar></navbar>
-    <v-container>
-      <div class="title">Personal Details</div>
+    <v-container><v-row class="mb-2" >
+        <v-col >
+          <h4 class="title"> Personal Details</h4>
+        </v-col>
+        <v-col>
+          <v-btn :to="{ name: `studentList` }" tile>Close</v-btn>
+        </v-col>
+      </v-row>
       <v-divider></v-divider>
       <br>
       <div v-if="student">

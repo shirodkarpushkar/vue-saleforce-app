@@ -3,20 +3,31 @@ import store from '@state/store'
 export default [
   {
     path: '/',
-    redirect: 'home',
+    redirect: {
+      name: 'studentList',
+    },
   },
-
+  /* student */
   {
-    path: '/home',
-    name: 'home',
-    component: () => lazyLoadView(import('@views/home')),
-
+    path: '/students',
+    name: 'studentList',
+    component: () => lazyLoadView(import('@views/student/studentList')),
   },
   {
-    path: '/student/:id',
+    path: '/students/:id',
     name: 'studentDetails',
-    component: () => lazyLoadView(import('@views/details')),
-
+    component: () => lazyLoadView(import('@views/student/details')),
+  },
+  /* school */
+  {
+    path: '/schools',
+    name: 'schoolList',
+    component: () => lazyLoadView(import('@views/school/schoolList')),
+  },
+  {
+    path: '/schools/:id',
+    name: 'schoolDetails',
+    component: () => lazyLoadView(import('@views/school/details')),
   },
   /* name has different to reuse the same component */
 
