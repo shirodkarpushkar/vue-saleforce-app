@@ -12,3 +12,4 @@ export const authGetters = mapGetters('auth', [
   'loggedIn',
 ])
 export const authMethods = mapActions('auth', ['loginOAuth', 'logOut'])
+export const schoolMethods = mapActions('school', ['triggerFlow'])

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const baseURL = `https://home277-dev-ed.my.salesforce.com`
-const ApiVersion = '49.0'
+const ApiVersion = 'v49.0'
 
 export const state = {}
 export const getters = {}
@@ -12,7 +12,7 @@ export const actions = {
     try {
       const res = await axios({
         method: 'post',
-        url: `${baseURL}/services/data/v49.0/actions/custom/flow/${API}`,
+        url: `${baseURL}/services/data/${ApiVersion}/actions/custom/flow/${API}`,
         data,
       })
       const result = res.data
