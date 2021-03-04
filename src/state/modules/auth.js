@@ -60,17 +60,19 @@ export const actions = {
       throw error
     }
   },
+  async loginOAuth({ commit }, { accessToken }) {
+    try {
+      commit('SET_CURRENT_USER_AUTHTOKEN', { accessToken })
+    } catch (error) {
+      throw errorHandler(error)
+    }
+  },
 
-
-
-  // Logs out the current user.
   logOut({ commit }) {
-    // commit('SET_CURRENT_USER', null)
     commit('SET_CURRENT_USER_AUTHTOKEN', null)
   },
 
-  // Validates the current user's token and refreshes it
-  // with new data from the API.
+
   validate({ commit, state }) {
     if (!state.authToken) return Promise.resolve(null)
 
@@ -93,7 +95,11 @@ function saveState(key, state) {
 }
 
 function setDefaultAuthHeaders(state) {
-  axios.defaults.headers.common['auth'] = state.authToken
-    ? state.authToken.result[0].token
+  axios.defaults.headers.common['Authorization'] = state.authToken
+    ? `Bearer ${state.authToken.accessToken}`
     : ''
+}
+
+async function errorHandler(error) {
+  return error.message ? error.message : error
 }
