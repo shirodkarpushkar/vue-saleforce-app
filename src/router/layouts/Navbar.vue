@@ -13,7 +13,15 @@
         </v-tabs>
       </v-toolbar-items>
       <v-spacer></v-spacer>
-      <v-btn v-if="!loggedIn"  class="mr-1" @click="authorise">Authorize</v-btn>
+      <v-switch
+        v-model="$vuetify.theme.dark"
+        :prepend-icon="
+          $vuetify.theme.dark ? 'mdi-weather-night' : 'mdi-weather-sunny'
+        "
+        class="mt-5"
+      >
+      </v-switch>
+      <v-btn v-if="!loggedIn" class="mr-1" @click="authorise">Authorize</v-btn>
       <v-btn v-if="loggedIn" icon @click="logout">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
@@ -21,14 +29,14 @@
   </div>
 </template>
 <script>
-import { authMethods,authGetters } from '@state/helpers'
+import { authMethods, authGetters } from '@state/helpers'
 export default {
   page: {
     title: 'Navbar',
     meta: [{ name: 'description', content: 'Navbar' }],
   },
   components: {},
-  computed:{
+  computed: {
     ...authGetters,
   },
   methods: {
