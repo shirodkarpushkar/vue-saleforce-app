@@ -2,6 +2,9 @@
   <div>
     <navbar></navbar>
     <v-container>
+      <div class="d-flex justify-end mb-2">
+        <v-btn color="primary"> Add New</v-btn>
+      </div>
 
       <v-data-table :headers="headers" :items="records" class="elevation-1">
         <template v-slot:item.Name="{ item }">
@@ -63,7 +66,6 @@ export default {
         this.getRecords()
       })
     },
-
   },
 }
 </script>

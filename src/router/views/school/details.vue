@@ -26,7 +26,7 @@
         <p>{{ school.School_Email__c }}</p>
 
         <h5>Address</h5>
-        <p>{{ school.School_Phone__c }}</p>
+        <p>{{ school.School_Address__c }}</p>
 
         <h5>Fees</h5>
         <p>${{ school.Fees__c }}</p>
