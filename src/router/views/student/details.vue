@@ -13,7 +13,7 @@
       <br>
       <div v-if="student">
         <h5 >Student Id</h5>
-        <p class="body-1">{{student.Name}}</p>
+        <p >{{student.Name}}</p>
 
         <h5>Student Name</h5>
         <p>{{student.Student_Name__c}}</p>

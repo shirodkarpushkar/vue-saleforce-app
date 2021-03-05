@@ -19,7 +19,8 @@ export default {
   }),
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import "./assets/css/style.scss";
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
