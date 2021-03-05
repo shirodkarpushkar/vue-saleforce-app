@@ -23,7 +23,12 @@
       </v-data-table>
     </v-container>
 
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog
+      v-model="dialog"
+      content-class="rounded-0"
+      persistent
+      max-width="600px"
+    >
       <v-card tile>
         <v-card-title>
           Add School

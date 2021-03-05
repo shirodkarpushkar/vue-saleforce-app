@@ -22,7 +22,12 @@
         </template>
       </v-data-table>
     </v-container>
-    <v-dialog v-model="emailDialog" persistent max-width="500px">
+    <v-dialog
+      v-model="emailDialog"
+      content-class="rounded-0"
+      persistent
+      max-width="500px"
+    >
       <v-card tile>
         <v-card-title>
           Send Email
