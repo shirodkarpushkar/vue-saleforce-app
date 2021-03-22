@@ -10,6 +10,7 @@
         <v-tabs>
           <v-tab :to="{ name: 'studentList' }">Student </v-tab>
           <v-tab :to="{ name: 'schoolList' }">Schools</v-tab>
+          <v-tab :to="{ name: 'layout' }">Layout</v-tab>
         </v-tabs>
       </v-toolbar-items>
       <v-spacer></v-spacer>
