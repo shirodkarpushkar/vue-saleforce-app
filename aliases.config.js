@@ -7,6 +7,7 @@ const aliases = {
   '@src': 'src',
   '@router': 'src/router',
   '@views': 'src/router/views',
+  '@mixins': 'src/mixins',
   '@layouts': 'src/router/layouts',
   '@components': 'src/components',
   '@assets': 'src/assets',
