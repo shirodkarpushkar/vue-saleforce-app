@@ -8,6 +8,7 @@
         <v-btn color="primary" class="mr-1" @click="addChair(150, 150)">+ Chair</v-btn>
         <v-btn color="primary" class="mr-1" @click="addBar()">+ Reception</v-btn>
         <v-btn color="primary" class="mr-1" @click="addWall(150, 150, 60, 60)">+ Wall</v-btn>
+        <v-btn color="primary" class="mr-1" @click="addRoundTable">+ Round Table</v-btn>
         <v-btn color="error" class="mr-1" @click="remove">Remove</v-btn>
         <v-btn color="primary" class="mr-1" @click="viewMode">View mode</v-btn>
       </div>
