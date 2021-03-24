@@ -175,13 +175,21 @@ export default {
       this.canvas.add(o)
       return o
     },
-    addRoundTable(left, top, width, height) {
+    addRoundTable(chairNumber) {
       const id = generateId()
+      const n = chairNumber
+      const theta = (2 * Math.PI) / n
+      const xo = 100
+      const yo = 100
+      const ro = 50
+      const rc = ro / 5
+
+      var chairs = []
 
       const c = new this.$fabric.Circle({
-        left: 100,
-        top: 100,
-        radius: 50,
+        left: xo,
+        top: yo,
+        radius: ro,
         fill: tableFill,
         stroke: tableStroke,
         strokeWidth: 2,
@@ -190,75 +198,27 @@ export default {
         originY: 'center',
         centeredRotation: true,
       })
-      const c1 = new this.$fabric.Rect({
-        left: 50,
-        top: 100,
-        width: 30,
-        height: 30,
-        fill: chairFill,
-        stroke: chairStroke,
-        strokeWidth: 2,
-        shadow: chairShadow,
-        originX: 'center',
-        originY: 'center',
-        centeredRotation: true,
-        snapAngle: 45,
-        selectable: false,
-        type: 'chair',
-        id: generateId(),
-      })
-      const c2 = new this.$fabric.Rect({
-        left: 150,
-        top: 100,
-        width: 30,
-        height: 30,
-        fill: chairFill,
-        stroke: chairStroke,
-        strokeWidth: 2,
-        shadow: chairShadow,
-        originX: 'center',
-        originY: 'center',
-        centeredRotation: true,
-        snapAngle: 45,
-        selectable: false,
-        type: 'chair',
-        id: generateId(),
-      })
-      const c3 = new this.$fabric.Rect({
-        left: 100,
-        top: 50,
-        width: 30,
-        height: 30,
-        fill: chairFill,
-        stroke: chairStroke,
-        strokeWidth: 2,
-        shadow: chairShadow,
-        originX: 'center',
-        originY: 'center',
-        centeredRotation: true,
-        snapAngle: 45,
-        selectable: false,
-        type: 'chair',
-        id: generateId(),
-      })
-      const c4 = new this.$fabric.Rect({
-        left: 100,
-        top: 150,
-        width: 30,
-        height: 30,
-        fill: chairFill,
-        stroke: chairStroke,
-        strokeWidth: 2,
-        shadow: chairShadow,
-        originX: 'center',
-        originY: 'center',
-        centeredRotation: true,
-        snapAngle: 45,
-        selectable: false,
-        type: 'chair',
-        id: generateId(),
-      })
-      const g = new this.$fabric.Group([c, c1, c2, c3, c4], {
+
+      for (let i = 0; i < n; i++) {
+        const x = xo + ro * Math.cos(i * theta)
+        const y = yo - ro * Math.sin(i * theta)
+        const chair = new this.$fabric.Circle({
+          left: x,
+          top: y,
+          radius: rc,
+          fill: chairFill,
+          stroke: chairStroke,
+          strokeWidth: 2,
+          shadow: chairShadow,
+          originX: 'center',
+          originY: 'center',
+          selectable: false,
+          type: 'chair',
+          id: generateId(),
+        })
+        chairs.push(chair)
+      }
+      const g = new this.$fabric.Group([...chairs, c], {
         centeredRotation: true,
         snapAngle: 45,
         selectable: true,
