@@ -1,3 +1,5 @@
+import { fabric } from 'fabric'
+
 const grid = 25
 const backgroundColor = '#f8f8f8'
 const lineStroke = '#ebebeb'
@@ -14,6 +16,7 @@ const barText = 'Reception'
 const wallFill = 'rgba(136, 136, 136, 0.7)'
 const wallStroke = '#686868'
 const wallShadow = 'rgba(0, 0, 0, 0.4) 5px 5px 20px'
+
 export default {
   data() {
     return {
@@ -22,7 +25,7 @@ export default {
     }
   },
   mounted() {
-    this.canvas = new this.$fabric.Canvas('canvas')
+    this.canvas = new fabric.Canvas('canvas')
     this.addDefaultObjects()
     // this.$nextTick(() => {
     //   this.canvas.on('object:moving', (e) => {})
@@ -31,7 +34,7 @@ export default {
   methods: {
     addRect(left, top, width, height) {
       const id = generateId()
-      const o = new this.$fabric.Rect({
+      const o = new fabric.Rect({
         width: width,
         height: height,
         fill: tableFill,
@@ -44,7 +47,7 @@ export default {
         snapAngle: 45,
         selectable: true,
       })
-      const t = new this.$fabric.IText(this.number.toString(), {
+      const t = new fabric.IText(this.number.toString(), {
         fontFamily: 'Calibri',
         fontSize: 14,
         fill: '#fff',
@@ -52,7 +55,7 @@ export default {
         originX: 'center',
         originY: 'center',
       })
-      const g = new this.$fabric.Group([o, t], {
+      const g = new fabric.Group([o, t], {
         left: left,
         top: top,
         centeredRotation: true,
@@ -68,7 +71,7 @@ export default {
     },
     addCircle(left, top, radius) {
       const id = generateId()
-      const o = new this.$fabric.Circle({
+      const o = new fabric.Circle({
         radius: radius,
         fill: tableFill,
         stroke: tableStroke,
@@ -78,7 +81,7 @@ export default {
         originY: 'center',
         centeredRotation: true,
       })
-      const t = new this.$fabric.IText(this.number.toString(), {
+      const t = new fabric.IText(this.number.toString(), {
         fontFamily: 'Calibri',
         fontSize: 14,
         fill: '#fff',
@@ -86,7 +89,7 @@ export default {
         originX: 'center',
         originY: 'center',
       })
-      const g = new this.$fabric.Group([o, t], {
+      const g = new fabric.Group([o, t], {
         left: left,
         top: top,
         centeredRotation: true,
@@ -101,7 +104,7 @@ export default {
       return g
     },
     addChair(left, top, width, height) {
-      const o = new this.$fabric.Rect({
+      const o = new fabric.Rect({
         left: left,
         top: top,
         width: 30,
@@ -123,7 +126,7 @@ export default {
       return o
     },
     addBar(left, top, width, height) {
-      const o = new this.$fabric.Rect({
+      const o = new fabric.Rect({
         width: width,
         height: height,
         fill: barFill,
@@ -135,7 +138,7 @@ export default {
         type: 'bar',
         id: generateId(),
       })
-      const t = new this.$fabric.IText(barText, {
+      const t = new fabric.IText(barText, {
         fontFamily: 'Calibri',
         fontSize: 14,
         fill: '#fff',
@@ -143,7 +146,7 @@ export default {
         originX: 'center',
         originY: 'center',
       })
-      const g = new this.$fabric.Group([o, t], {
+      const g = new fabric.Group([o, t], {
         left: left,
         top: top,
         centeredRotation: true,
@@ -155,7 +158,7 @@ export default {
       return g
     },
     addWall(left, top, width, height) {
-      const o = new this.$fabric.Rect({
+      const o = new fabric.Rect({
         left: left,
         top: top,
         width: width,
@@ -186,7 +189,7 @@ export default {
 
       var chairs = []
 
-      const c = new this.$fabric.Circle({
+      const c = new fabric.Circle({
         left: xo,
         top: yo,
         radius: ro,
@@ -202,7 +205,7 @@ export default {
       for (let i = 0; i < n; i++) {
         const x = xo + ro * Math.cos(i * theta)
         const y = yo - ro * Math.sin(i * theta)
-        const chair = new this.$fabric.Circle({
+        const chair = new fabric.Circle({
           left: x,
           top: y,
           radius: rc,
@@ -218,17 +221,17 @@ export default {
         })
         chairs.push(chair)
       }
-       const t = new this.$fabric.IText(this.number.toString(), {
-         fontFamily: 'Calibri',
-         fontSize: 14,
-         fill: '#fff',
-         textAlign: 'center',
-         left: xo,
-         top: yo,
-         originX: 'center',
-         originY: 'center',
-       })
-      const g = new this.$fabric.Group([...chairs, c, t], {
+      const t = new fabric.IText(this.number.toString(), {
+        fontFamily: 'Calibri',
+        fontSize: 14,
+        fill: '#fff',
+        textAlign: 'center',
+        left: xo,
+        top: yo,
+        originX: 'center',
+        originY: 'center',
+      })
+      const g = new fabric.Group([...chairs, c, t], {
         centeredRotation: true,
         snapAngle: 45,
         selectable: true,
@@ -238,7 +241,6 @@ export default {
       })
       this.canvas.add(g)
       this.number++
-
     },
     addDefaultObjects() {
       this.addChair(15, 105)
