@@ -218,7 +218,17 @@ export default {
         })
         chairs.push(chair)
       }
-      const g = new this.$fabric.Group([...chairs, c], {
+       const t = new this.$fabric.IText(this.number.toString(), {
+         fontFamily: 'Calibri',
+         fontSize: 14,
+         fill: '#fff',
+         textAlign: 'center',
+         left: xo,
+         top: yo,
+         originX: 'center',
+         originY: 'center',
+       })
+      const g = new this.$fabric.Group([...chairs, c, t], {
         centeredRotation: true,
         snapAngle: 45,
         selectable: true,
@@ -227,6 +237,8 @@ export default {
         number: this.number,
       })
       this.canvas.add(g)
+      this.number++
+
     },
     addDefaultObjects() {
       this.addChair(15, 105)
