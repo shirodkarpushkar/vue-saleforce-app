@@ -1,5 +1,6 @@
 import { fabric } from 'fabric'
-
+const canvasWidth = 980
+const canvasHeight = 620
 const grid = 25
 const backgroundColor = '#f8f8f8'
 const lineStroke = '#ebebeb'
@@ -22,10 +23,41 @@ export default {
     return {
       canvas: null,
       number: 0,
+      dialog: false,
+      items: [
+        {
+          title: 'Rectangular table (both sides)',
+          type: 'rect_tbl_two_sides',
+        },
+        {
+          title: 'Rectangular table (one side)',
+          type: 'rect_tbl_one_side',
+        },
+        {
+          title: 'Round table',
+          type: 'round_tbl',
+        },
+        {
+          title: 'Square table',
+          type: 'square_tbl',
+        },
+        {
+          title: 'Square',
+          type: 'square',
+        },
+      ],
+      item: {
+        title: '',
+        type: '',
+        chairs: 0,
+      },
     }
   },
   mounted() {
-    this.canvas = new fabric.Canvas('canvas')
+    this.canvas = new fabric.Canvas('canvas', {
+      width: canvasWidth,
+      height: canvasHeight,
+    })
     this.addDefaultObjects()
     // this.$nextTick(() => {
     //   this.canvas.on('object:moving', (e) => {})
@@ -242,6 +274,70 @@ export default {
       this.canvas.add(g)
       this.number++
     },
+    addRectTbltwoSided(chairNumber) {
+      const id = generateId()
+      const n = chairNumber
+      const theta = (2 * Math.PI) / n
+      const xo = 100
+      const yo = 100
+      const ro = 50
+      const rc = ro / 5
+
+      var chairs = []
+
+      const c = new fabric.Circle({
+        left: xo,
+        top: yo,
+        radius: ro,
+        fill: tableFill,
+        stroke: tableStroke,
+        strokeWidth: 2,
+        shadow: tableShadow,
+        originX: 'center',
+        originY: 'center',
+        centeredRotation: true,
+      })
+
+      for (let i = 0; i < n; i++) {
+        const x = xo + ro * Math.cos(i * theta)
+        const y = yo - ro * Math.sin(i * theta)
+        const chair = new fabric.Circle({
+          left: x,
+          top: y,
+          radius: rc,
+          fill: chairFill,
+          stroke: chairStroke,
+          strokeWidth: 2,
+          shadow: chairShadow,
+          originX: 'center',
+          originY: 'center',
+          selectable: false,
+          type: 'chair',
+          id: generateId(),
+        })
+        chairs.push(chair)
+      }
+      const t = new fabric.IText(this.number.toString(), {
+        fontFamily: 'Calibri',
+        fontSize: 14,
+        fill: '#fff',
+        textAlign: 'center',
+        left: xo,
+        top: yo,
+        originX: 'center',
+        originY: 'center',
+      })
+      const g = new fabric.Group([...chairs, c, t], {
+        centeredRotation: true,
+        snapAngle: 45,
+        selectable: true,
+        type: 'table',
+        id: id,
+        number: this.number,
+      })
+      this.canvas.add(g)
+      this.number++
+    },
     addDefaultObjects() {
       this.addChair(15, 105)
       this.addChair(15, 135)
@@ -317,6 +413,27 @@ export default {
       this.canvas.hoverCursor = 'pointer'
       this.canvas.discardActiveObject()
       this.canvas.renderAll()
+    },
+    openDialog(item) {
+      this.dialog = true
+      this.item = {
+        title: item.title,
+        type: item.type,
+        chairs: 0,
+      }
+    },
+    addItem() {
+      switch (this.item.type) {
+        case 'round_tbl':
+          this.addRoundTable(this.item.chairs)
+          this.dialog = false
+          break
+
+        default:
+          this.dialog = false
+
+          break
+      }
     },
   },
 }

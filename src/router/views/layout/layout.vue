@@ -1,57 +1,88 @@
 <template>
   <div>
     <navbar></navbar>
-    <v-container>
-      <div class="d-flex justify-center mb-10">
-        <v-btn color="primary" class="mr-1" @click="addRect(150, 150, 90, 60)"
-          >+ &#9647; Table</v-btn
-        >
-        <v-btn color="primary" class="mr-1" @click="addCircle(150, 150, 50)"
-          >+ &#9711; Table</v-btn
-        >
-        <v-btn color="primary" class="mr-1" @click="addChair(150, 150)"
-          >+ Chair</v-btn
-        >
-        <v-btn color="primary" class="mr-1" @click="addBar()"
-          >+ Reception</v-btn
-        >
-        <v-btn color="primary" class="mr-1" @click="addWall(150, 150, 60, 60)"
-          >+ Wall</v-btn
-        >
-        <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" class="mr-1" v-bind="attrs" v-on="on">
-              + ROUND TABLE
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item @click="addRoundTable(3)">
-              3 Chairs
-            </v-list-item>
-            <v-list-item @click="addRoundTable(4)">
-              4 Chairs
-            </v-list-item>
-            <v-list-item @click="addRoundTable(5)">
-              5 Chairs
-            </v-list-item>
-            <v-list-item @click="addRoundTable(6)">
-              6 Chairs
-            </v-list-item>
-            <v-list-item @click="addRoundTable(7)">
-              7 Chairs
-            </v-list-item>
-            <v-list-item @click="addRoundTable(8)">
-              8 Chairs
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <v-btn color="error" class="mr-1" @click="remove">Remove</v-btn>
-        <v-btn color="primary" class="mr-1" @click="viewMode">View mode</v-btn>
-      </div>
-      <v-row align="center" justify="center">
-        <canvas id="canvas" width="1000" height="1000"></canvas>
+    <v-container fluid>
+      <v-row no-gutters>
+        <v-col sm="3">
+          <v-card class="mb-2" tile>
+            <v-card-title>
+              + Tables
+            </v-card-title>
+            <v-card-text>
+              <v-list>
+                <v-list-item
+                  v-for="(item, i) in items"
+                  :key="i"
+                  @click="openDialog(item)"
+                >
+                  <v-list-item-title>
+                    {{ item.title }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
+          <v-card tile>
+            <v-card-title>
+              Guest
+            </v-card-title>
+          </v-card>
+        </v-col>
+        <v-col sm="9">
+           <div class="seating-layout-btn">
+              <v-btn color="primary" class="mr-1" @click="addChair(150, 150)"
+                >+ Chair</v-btn
+              >
+              <v-btn color="primary" class="mr-1" @click="addBar"
+                >+ Reception</v-btn
+              >
+              <v-btn
+                color="primary"
+                class="mr-1"
+                @click="addWall(150, 150, 60, 60)"
+                >+ Wall</v-btn
+              >
+              <v-btn color="error" class="mr-1" @click="remove">Remove</v-btn>
+              <v-btn color="primary" class="mr-1" @click="viewMode"
+                >View mode</v-btn
+              >
+            </div>
+          <v-row no-gutters justify="center">
+            <v-card tile><canvas id="canvas"></canvas></v-card>
+          </v-row>
+        </v-col>
       </v-row>
     </v-container>
+    <v-dialog
+      v-model="dialog"
+      content-class="rounded-0"
+      persistent
+      max-width="500px"
+    >
+      <v-card tile>
+        <v-card-title> Add {{ item.title }} </v-card-title>
+        <v-card-text>
+          <v-text-field
+            v-model="item.chairs"
+            label="Chairs"
+            placeholder="Enter number of chairs"
+            type="number"
+            :max="5"
+            :min="0"
+          >
+          </v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false">
+            Close
+          </v-btn>
+          <v-btn color="primary" @click="addItem">
+            + add
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
