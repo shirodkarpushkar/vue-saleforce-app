@@ -33,7 +33,7 @@
               <v-btn color="primary" class="mr-1" @click="addChair(150, 150)"
                 >+ Chair</v-btn
               >
-              <v-btn color="primary" class="mr-1" @click="addBar"
+              <v-btn color="primary" class="mr-1" @click="addBar(150, 150, 180, 60)"
                 >+ Reception</v-btn
               >
               <v-btn

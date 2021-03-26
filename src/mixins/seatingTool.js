@@ -527,6 +527,10 @@ export default {
           this.addRectTblOneSided(this.item.chairs)
           this.dialog = false
           break
+        case 'square':
+          this.addRect(150, 150, 80, 80)
+          this.dialog = false
+          break
 
         default:
           this.dialog = false
