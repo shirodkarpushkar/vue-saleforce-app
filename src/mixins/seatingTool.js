@@ -287,8 +287,7 @@ export default {
       const y1 = 100
       const ro = 50
       const rc = ro / 5
-      const wo =
-        n % 2 === 0 ? (n + 1) * delta + 2 * n * rc : n * delta + 2 * n * rc
+      const wo = (n + 1) * delta + 2 * n * rc
       const ho = 3 * delta
       const xo = x1 + wo / 2
       const yo = y1 + ho / 2
@@ -310,7 +309,8 @@ export default {
       })
 
       for (let i = 0; i < n; i++) {
-        const x = x1 + (i + 1) * (delta + rc)
+        const x = x1 + (i + 1) * delta + 2 * i * rc
+
         const y = y1
         const yb = y1 + ho
         const chairTop = new fabric.Circle({
@@ -321,7 +321,7 @@ export default {
           stroke: chairStroke,
           strokeWidth: 2,
           shadow: chairShadow,
-          originX: 'center',
+          originX: 'left',
           originY: 'center',
           selectable: false,
           type: 'chair',
@@ -336,7 +336,7 @@ export default {
           stroke: chairStroke,
           strokeWidth: 2,
           shadow: chairShadow,
-          originX: 'center',
+          originX: 'left',
           originY: 'center',
           selectable: false,
           type: 'chair',
@@ -372,8 +372,8 @@ export default {
       const y1 = 100
       const ro = 50
       const rc = ro / 5
-      const wo =
-        n % 2 === 0 ? (n + 1) * delta + 2 * n * rc : n * delta + 2 * n * rc
+      const wo = (n + 1) * delta + 2 * n * rc
+
       const ho = 3 * delta
       const xo = x1 + wo / 2
       const yo = y1 + ho / 2
@@ -395,7 +395,7 @@ export default {
       })
 
       for (let i = 0; i < n; i++) {
-        const x = x1 + (i + 1) * (delta + rc)
+        const x = x1 + (i + 1) * delta + 2 * i * rc
         const y = y1
         const yb = y1 + ho
         const chairTop = new fabric.Circle({
@@ -406,7 +406,7 @@ export default {
           stroke: chairStroke,
           strokeWidth: 2,
           shadow: chairShadow,
-          originX: 'center',
+          originX: 'left',
           originY: 'center',
           selectable: false,
           type: 'chair',
