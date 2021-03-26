@@ -276,32 +276,39 @@ export default {
     },
     addRectTbltwoSided(chairNumber) {
       const id = generateId()
-      const n = chairNumber
-      const theta = (2 * Math.PI) / n
-      const xo = 100
-      const yo = 100
+      const n = parseInt(chairNumber)
+      const delta = 20
+      const x1 = 100
+      const y1 = 100
       const ro = 50
       const rc = ro / 5
+      const wo =
+        n % 2 === 0 ? (n + 1) * delta + 2 * n * rc : n * delta + 2 * n * rc
+      const ho = 3 * delta
+      const xo = x1 + wo / 2
+      const yo = y1 + ho / 2
 
       var chairs = []
 
-      const c = new fabric.Circle({
-        left: xo,
-        top: yo,
-        radius: ro,
+      const rect = new fabric.Rect({
+        left: x1,
+        top: y1,
+        width: wo,
+        height: ho,
         fill: tableFill,
         stroke: tableStroke,
         strokeWidth: 2,
         shadow: tableShadow,
-        originX: 'center',
-        originY: 'center',
+        originX: 'left',
+        originY: 'top',
         centeredRotation: true,
       })
 
       for (let i = 0; i < n; i++) {
-        const x = xo + ro * Math.cos(i * theta)
-        const y = yo - ro * Math.sin(i * theta)
-        const chair = new fabric.Circle({
+        const x = x1 + (i + 1) * (delta + rc)
+        const y = y1
+        const yb = y1 + ho
+        const chairTop = new fabric.Circle({
           left: x,
           top: y,
           radius: rc,
@@ -315,7 +322,22 @@ export default {
           type: 'chair',
           id: generateId(),
         })
-        chairs.push(chair)
+        chairs.push(chairTop)
+        const chairBottom = new fabric.Circle({
+          left: x,
+          top: yb,
+          radius: rc,
+          fill: chairFill,
+          stroke: chairStroke,
+          strokeWidth: 2,
+          shadow: chairShadow,
+          originX: 'center',
+          originY: 'center',
+          selectable: false,
+          type: 'chair',
+          id: generateId(),
+        })
+        chairs.push(chairBottom)
       }
       const t = new fabric.IText(this.number.toString(), {
         fontFamily: 'Calibri',
@@ -327,9 +349,78 @@ export default {
         originX: 'center',
         originY: 'center',
       })
-      const g = new fabric.Group([...chairs, c, t], {
+      const g = new fabric.Group([...chairs, rect, t], {
         centeredRotation: true,
-        snapAngle: 45,
+        selectable: true,
+        type: 'table',
+        id: id,
+        number: this.number,
+      })
+      this.canvas.add(g)
+      this.number++
+    },
+    addRectTblOneSided(chairNumber) {
+      const id = generateId()
+      const n = parseInt(chairNumber)
+      const delta = 20
+      const x1 = 100
+      const y1 = 100
+      const ro = 50
+      const rc = ro / 5
+      const wo =
+        n % 2 === 0 ? (n + 1) * delta + 2 * n * rc : n * delta + 2 * n * rc
+      const ho = 3 * delta
+      const xo = x1 + wo / 2
+      const yo = y1 + ho / 2
+
+      var chairs = []
+
+      const rect = new fabric.Rect({
+        left: x1,
+        top: y1,
+        width: wo,
+        height: ho,
+        fill: tableFill,
+        stroke: tableStroke,
+        strokeWidth: 2,
+        shadow: tableShadow,
+        originX: 'left',
+        originY: 'top',
+        centeredRotation: true,
+      })
+
+      for (let i = 0; i < n; i++) {
+        const x = x1 + (i + 1) * (delta + rc)
+        const y = y1
+        const yb = y1 + ho
+        const chairTop = new fabric.Circle({
+          left: x,
+          top: y,
+          radius: rc,
+          fill: chairFill,
+          stroke: chairStroke,
+          strokeWidth: 2,
+          shadow: chairShadow,
+          originX: 'center',
+          originY: 'center',
+          selectable: false,
+          type: 'chair',
+          id: generateId(),
+        })
+        chairs.push(chairTop)
+      }
+      const t = new fabric.IText(this.number.toString(), {
+        fontFamily: 'Calibri',
+        fontSize: 14,
+        fill: '#fff',
+        textAlign: 'center',
+        left: xo,
+        top: yo,
+        originX: 'center',
+        originY: 'center',
+      })
+      const g = new fabric.Group([...chairs, rect, t], {
+        centeredRotation: true,
         selectable: true,
         type: 'table',
         id: id,
@@ -426,6 +517,14 @@ export default {
       switch (this.item.type) {
         case 'round_tbl':
           this.addRoundTable(this.item.chairs)
+          this.dialog = false
+          break
+        case 'rect_tbl_two_sides':
+          this.addRectTbltwoSided(this.item.chairs)
+          this.dialog = false
+          break
+        case 'rect_tbl_one_side':
+          this.addRectTblOneSided(this.item.chairs)
           this.dialog = false
           break
 
