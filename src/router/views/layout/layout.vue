@@ -69,6 +69,7 @@
             type="number"
             :max="5"
             :min="0"
+            :disabled="!item.chairSelection"
           >
           </v-text-field>
         </v-card-text>
