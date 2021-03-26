@@ -6,21 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>404 - redirect</title>
+    <script>
+      sessionStorage.redirect = location.href;
+    </script>
+    <script>
+      (function(){
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect != location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
+<meta http-equiv="refresh" content="0;URL='/vue-saleforce-app'">
 </head>
 
 <body>
-  <script>
-    if (window.sessionStorage.path) {
-  let path = window.sessionStorage.path; // gets the path saved on sessionStorage
-  window.history.pushState(null, null, path); // push it on url
-  window.sessionStorage.removeItem('path'); // removes from session
 
-} else { // if it's on 404.html (path doens't exist)
-  let path = window.location.pathname; // get the path url
-  window.sessionStorage.path = path; // saves on sessionStorage
-  window.location.href = '/'; // go to index
-}
-  </script>
 </body>
 
 </html>
