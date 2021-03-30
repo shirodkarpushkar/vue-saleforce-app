@@ -1,4 +1,13 @@
 import { fabric } from 'fabric'
+fabric.Object.prototype.set({
+  transparentCorners: true,
+  borderColor: '#38A62E',
+  borderScaleFactor: 2,
+  cornerColor: '#003784',
+  cornerSize: 2,
+  selectionColor: '#007cd6',
+  hasControls: false,
+})
 const canvasWidth = 980
 const canvasHeight = 620
 const grid = 25
@@ -565,8 +574,9 @@ export default {
     },
     remove() {
       const o = this.canvas.getActiveObject()
+      
       if (o) {
-        o.remove()
+        // o.remove()
         this.canvas.remove(o)
         this.canvas.discardActiveObject()
         this.canvas.renderAll()
