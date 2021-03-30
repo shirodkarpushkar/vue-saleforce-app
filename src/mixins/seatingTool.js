@@ -6,17 +6,13 @@ const backgroundColor = '#f8f8f8'
 const lineStroke = '#ebebeb'
 const tableFill = 'rgba(150, 111, 51, 0.7)'
 const tableStroke = '#694d23'
-const tableShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px'
 const chairFill = 'rgba(67, 42, 4, 0.7)'
 const chairStroke = '#32230b'
-const chairShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px'
 const barFill = 'rgba(0, 93, 127, 0.7)'
 const barStroke = '#003e54'
-const barShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px'
 const barText = 'Reception'
 const wallFill = 'rgba(136, 136, 136, 0.7)'
 const wallStroke = '#686868'
-const wallShadow = 'rgba(0, 0, 0, 0.4) 5px 5px 20px'
 
 export default {
   data() {
@@ -93,7 +89,6 @@ export default {
         fill: tableFill,
         stroke: tableStroke,
         strokeWidth: 2,
-        shadow: tableShadow,
         originX: 'center',
         originY: 'center',
         centeredRotation: true,
@@ -129,7 +124,7 @@ export default {
         fill: tableFill,
         stroke: tableStroke,
         strokeWidth: 2,
-        shadow: tableShadow,
+
         originX: 'center',
         originY: 'center',
         centeredRotation: true,
@@ -165,7 +160,7 @@ export default {
         fill: chairFill,
         stroke: chairStroke,
         strokeWidth: 2,
-        shadow: chairShadow,
+
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
@@ -185,7 +180,7 @@ export default {
         fill: barFill,
         stroke: barStroke,
         strokeWidth: 2,
-        shadow: barShadow,
+
         originX: 'center',
         originY: 'center',
         type: 'bar',
@@ -219,7 +214,6 @@ export default {
         fill: wallFill,
         stroke: wallStroke,
         strokeWidth: 2,
-        shadow: wallShadow,
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
@@ -249,7 +243,7 @@ export default {
         fill: tableFill,
         stroke: tableStroke,
         strokeWidth: 2,
-        shadow: tableShadow,
+
         originX: 'center',
         originY: 'center',
         centeredRotation: true,
@@ -265,7 +259,7 @@ export default {
           fill: chairFill,
           stroke: chairStroke,
           strokeWidth: 2,
-          shadow: chairShadow,
+
           originX: 'center',
           originY: 'center',
           selectable: false,
@@ -318,7 +312,7 @@ export default {
         fill: tableFill,
         stroke: tableStroke,
         strokeWidth: 2,
-        shadow: tableShadow,
+
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
@@ -336,7 +330,7 @@ export default {
           fill: chairFill,
           stroke: chairStroke,
           strokeWidth: 2,
-          shadow: chairShadow,
+
           originX: 'left',
           originY: 'center',
           selectable: true,
@@ -351,7 +345,7 @@ export default {
           fill: chairFill,
           stroke: chairStroke,
           strokeWidth: 2,
-          shadow: chairShadow,
+
           originX: 'left',
           originY: 'center',
           selectable: true,
@@ -405,7 +399,7 @@ export default {
         fill: tableFill,
         stroke: tableStroke,
         strokeWidth: 2,
-        shadow: tableShadow,
+
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
@@ -422,7 +416,7 @@ export default {
           fill: chairFill,
           stroke: chairStroke,
           strokeWidth: 2,
-          shadow: chairShadow,
+
           originX: 'left',
           originY: 'center',
           selectable: false,
@@ -473,7 +467,7 @@ export default {
         fill: tableFill,
         stroke: tableStroke,
         strokeWidth: 2,
-        shadow: tableShadow,
+
         originX: 'center',
         originY: 'center',
         centeredRotation: true,
@@ -489,7 +483,7 @@ export default {
           fill: chairFill,
           stroke: chairStroke,
           strokeWidth: 2,
-          shadow: chairShadow,
+
           originX: 'center',
           originY: 'center',
           selectable: false,
