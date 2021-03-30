@@ -56,6 +56,12 @@ export default {
         type: '',
         chairs: 0,
       },
+      guests: [
+        { name: 'Vipul' },
+        { name: 'John' },
+        { name: 'Tom' },
+        { name: 'Jerry' },
+      ],
     }
   },
   mounted() {
@@ -63,10 +69,20 @@ export default {
       width: canvasWidth,
       height: canvasHeight,
     })
+
     this.addDefaultObjects()
-    // this.$nextTick(() => {
-    //   this.canvas.on('object:moving', (e) => {})
-    // })
+    this.$nextTick(() => {
+      this.canvas.on('mouse:down', (e) => {
+        if (e.target) {
+          console.log('an object was clicked! ', e.target)
+        }
+      })
+      this.canvas.on('dragover', (e) => {
+        if (e.target) {
+          console.log('an object was clicked! ', e.target)
+        }
+      })
+    })
   },
   methods: {
     addRect(left, top, width, height) {
@@ -323,7 +339,7 @@ export default {
           shadow: chairShadow,
           originX: 'left',
           originY: 'center',
-          selectable: false,
+          selectable: true,
           type: 'chair',
           id: generateId(),
         })
@@ -338,7 +354,7 @@ export default {
           shadow: chairShadow,
           originX: 'left',
           originY: 'center',
-          selectable: false,
+          selectable: true,
           type: 'chair',
           id: generateId(),
         })
@@ -359,6 +375,7 @@ export default {
         selectable: true,
         type: 'table',
         id: id,
+        subTargetCheck: true,
         number: this.number,
       })
       this.canvas.add(g)

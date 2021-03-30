@@ -24,29 +24,45 @@
           </v-card>
           <v-card tile>
             <v-card-title>
-              Guest
+              + Guest
             </v-card-title>
+            <v-card-text>
+              <v-list>
+                <v-list-item
+                  v-for="(item, i) in guests"
+                  :key="`guest-${i}}`"
+                  :draggable="true"
+                >
+                  <v-list-item-title>
+                    {{ item.name }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
           </v-card>
         </v-col>
         <v-col sm="9">
-           <div class="seating-layout-btn">
-              <v-btn color="primary" class="mr-1" @click="addChair(150, 150)"
-                >+ Chair</v-btn
-              >
-              <v-btn color="primary" class="mr-1" @click="addBar(150, 150, 180, 60)"
-                >+ Reception</v-btn
-              >
-              <v-btn
-                color="primary"
-                class="mr-1"
-                @click="addWall(150, 150, 60, 60)"
-                >+ Wall</v-btn
-              >
-              <v-btn color="error" class="mr-1" @click="remove">Remove</v-btn>
-              <v-btn color="primary" class="mr-1" @click="viewMode"
-                >View mode</v-btn
-              >
-            </div>
+          <div class="seating-layout-btn">
+            <v-btn color="primary" class="mr-1" @click="addChair(150, 150)"
+              >+ Chair</v-btn
+            >
+            <v-btn
+              color="primary"
+              class="mr-1"
+              @click="addBar(150, 150, 180, 60)"
+              >+ Reception</v-btn
+            >
+            <v-btn
+              color="primary"
+              class="mr-1"
+              @click="addWall(150, 150, 60, 60)"
+              >+ Wall</v-btn
+            >
+            <v-btn color="error" class="mr-1" @click="remove">Remove</v-btn>
+            <v-btn color="primary" class="mr-1" @click="viewMode"
+              >View mode</v-btn
+            >
+          </div>
           <v-row no-gutters justify="center">
             <v-card tile><canvas id="canvas"></canvas></v-card>
           </v-row>
