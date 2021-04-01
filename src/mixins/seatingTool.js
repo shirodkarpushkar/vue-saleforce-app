@@ -8,20 +8,28 @@ fabric.Object.prototype.set({
   selectionColor: '#007cd6',
   hasControls: false,
 })
+
 const textfill = '#000'
+
 const selectionStroke = '#38A62E'
+
 const canvasWidth = 980
 const canvasHeight = 620
 const grid = 25
 const backgroundColor = '#f8f8f8'
 const lineStroke = '#ebebeb'
+
 const tableFill = '#fff'
 const tableStroke = '#694d23'
+
+const chairRadius = 15
 const chairFill = '#fff'
 const chairStroke = '#694d23'
+
 const barFill = 'rgba(0, 93, 127, 0.7)'
 const barStroke = '#003e54'
 const barText = 'Reception'
+
 const wallFill = 'rgba(136, 136, 136, 0.7)'
 const wallStroke = '#686868'
 
@@ -294,7 +302,7 @@ export default {
       const xo = 100
       const yo = 100
       const ro = 50
-      const rc = ro / 5
+      const rc = chairRadius
       var chairs = []
       const c = new fabric.Circle({
         left: xo,
@@ -356,7 +364,7 @@ export default {
       const x1 = 100
       const y1 = 100
       const ro = 50
-      const rc = ro / 5
+      const rc = chairRadius
       const wo = (n + 1) * delta + 2 * n * rc
       const ho = 3 * delta
       const xo = x1 + wo / 2
@@ -442,7 +450,7 @@ export default {
       const x1 = 100
       const y1 = 100
       const ro = 50
-      const rc = ro / 5
+      const rc = chairRadius
       const wo = (n + 1) * delta + 2 * n * rc
 
       const ho = 3 * delta
@@ -512,7 +520,7 @@ export default {
       const xo = 100
       const yo = 100
       const ro = 50
-      const rc = ro / 5
+      const rc = chairRadius
       const wo = 2 * ro
       const ho = 2 * ro
       const theta = (2 * Math.PI) / n
