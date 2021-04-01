@@ -12,6 +12,8 @@ fabric.Object.prototype.set({
 const textfill = '#000'
 
 const selectionStroke = '#38A62E'
+const selectionStrokeWidth = 2.5
+const objectStrokeWidth = 1
 
 const canvasWidth = 980
 const canvasHeight = 620
@@ -78,6 +80,7 @@ export default {
         { name: 'Jerry' },
       ],
       onDropChair: null,
+      onDropTable: null,
     }
   },
   mounted() {
@@ -87,66 +90,38 @@ export default {
     })
 
     this.$nextTick(() => {
-      this.canvas.on('mouse:down', (e) => {
-        if (e.target) {
-          console.log('an object was clicked! ', e.target.type)
-          console.log(
-            'object location left, top===>',
-            e.target.left,
-            e.target.top
-          )
-          const origX = e.pointer.x
-          const origY = e.pointer.y
-          console.log(
-            '🚀 ~ file: seatingTool.js ~ line 90 ~ this.canvas.on ~ origX,origY',
-            origX,
-            origY
-          )
-
-          const grpObjects = e.target._objects
-          console.log(
-            '🚀 ~ file: seatingTool.js ~ line 94 ~ this.canvas.on ~ grpObjects',
-            grpObjects
-          )
-        }
-      })
-      // this.canvas.on('dragenter', (dragEvent) => {
-      //   console.log('dragenter! ', dragEvent)
-      // })
       this.canvas.on('dragover', (dragEvent) => {
         if (dragEvent.target) {
           const o = dragEvent.target
+          console.log(
+            '🚀 ~ file: seatingTool.js ~ line 96 ~ this.canvas.on ~ o',
+            o.type
+          )
           if (o.type === 'chair') {
             this.onDropChair = o
             this.onDropChair.on('dragenter', (e) => {
               o.stroke = selectionStroke
+              o.strokeWidth = selectionStrokeWidth
+              this.canvas.renderAll()
             })
             this.onDropChair.on('dragover', (e) => {
-              console.log('🚀 dragover this.onDropChair.on ~ e', e)
               o.stroke = selectionStroke
+              o.strokeWidth = selectionStrokeWidth
               this.canvas.renderAll()
             })
             this.onDropChair.on('dragleave', (e) => {
-              console.log('🚀 dragleave this.onDropChair.on ~ e', e)
               o.stroke = chairStroke
-              this.canvas.renderAll()
+              o.strokeWidth = objectStrokeWidth
+              this.regroupObjects()
             })
           }
-          this.ungroupObjects(dragEvent.target)
+          // this.ungroupObjects(dragEvent.target)
         }
       })
 
-      // this.canvas.on('dragleave', (dragEvent) => {
-      //   console.log('dragleave! ', dragEvent)
-      // })
       this.canvas.on('drop', (dragEvent) => {
-        if (dragEvent.target) {
-          console.log(
-            'dropped! ',
-            dragEvent.e.layerX,
-            dragEvent.e.layerY,
-            dragEvent.target.type
-          )
+        if (dragEvent) {
+          console.log('dropped! ', dragEvent)
         }
       })
     })
@@ -159,7 +134,7 @@ export default {
         height: height,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 1,
+        strokeWidth: objectStrokeWidth,
         originX: 'center',
         originY: 'center',
         centeredRotation: true,
@@ -194,7 +169,7 @@ export default {
         radius: radius,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 1,
+        strokeWidth: objectStrokeWidth,
 
         originX: 'center',
         originY: 'center',
@@ -230,7 +205,7 @@ export default {
         height: 30,
         fill: chairFill,
         stroke: chairStroke,
-        strokeWidth: 1,
+        strokeWidth: objectStrokeWidth,
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
@@ -249,7 +224,7 @@ export default {
         height: height,
         fill: barFill,
         stroke: barStroke,
-        strokeWidth: 1,
+        strokeWidth: objectStrokeWidth,
 
         originX: 'center',
         originY: 'center',
@@ -283,7 +258,7 @@ export default {
         height: height,
         fill: wallFill,
         stroke: wallStroke,
-        strokeWidth: 1,
+        strokeWidth: objectStrokeWidth,
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
@@ -310,7 +285,7 @@ export default {
         radius: ro,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 1,
+        strokeWidth: objectStrokeWidth,
 
         originX: 'center',
         originY: 'center',
@@ -326,7 +301,7 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 1,
+          strokeWidth: objectStrokeWidth,
 
           originX: 'center',
           originY: 'center',
@@ -379,7 +354,7 @@ export default {
         height: ho,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 1,
+        strokeWidth: objectStrokeWidth,
 
         originX: 'left',
         originY: 'top',
@@ -397,7 +372,7 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 1,
+          strokeWidth: objectStrokeWidth,
 
           originX: 'left',
           originY: 'center',
@@ -412,7 +387,7 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 1,
+          strokeWidth: objectStrokeWidth,
 
           originX: 'left',
           originY: 'center',
@@ -466,8 +441,7 @@ export default {
         height: ho,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 1,
-
+        strokeWidth: objectStrokeWidth,
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
@@ -483,7 +457,7 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 1,
+          strokeWidth: objectStrokeWidth,
 
           originX: 'left',
           originY: 'center',
@@ -534,7 +508,7 @@ export default {
         height: ho,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 1,
+        strokeWidth: objectStrokeWidth,
 
         originX: 'center',
         originY: 'center',
@@ -550,7 +524,7 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 1,
+          strokeWidth: objectStrokeWidth,
           originX: 'center',
           originY: 'center',
           selectable: true,
@@ -646,12 +620,27 @@ export default {
     },
     ungroupObjects(group) {
       if (group._objects && group._objects.length) {
+        this.onDropTable = group
         const items = group._objects
         this.canvas.remove(group)
         for (let i = 0; i < items.length; i++) {
           this.canvas.add(items[i])
         }
         this.canvas.renderAll()
+      }
+    },
+    regroupObjects() {
+      if (this.onDropTable._objects && this.onDropTable._objects.length) {
+        const objects = this.canvas.getObjects()
+        const existingTables = objects.filter(
+          (el) => el.id === this.onDropTable.id
+        )
+
+        if (!existingTables.length) {
+          this.canvas.add(this.onDropTable)
+          this.canvas.renderAll()
+          console.log('regrouped')
+        }
       }
     },
   },
