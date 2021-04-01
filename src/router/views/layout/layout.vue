@@ -31,8 +31,11 @@
                 <v-list-item
                   v-for="(item, i) in guests"
                   :key="`guest-${i}}`"
-                  :draggable="true"
+
                 >
+                <v-list-item-icon :draggable="true">
+                  <v-img src="@assets/images/man.svg" width="20"></v-img>
+                </v-list-item-icon>
                   <v-list-item-title>
                     {{ item.name }}
                   </v-list-item-title>

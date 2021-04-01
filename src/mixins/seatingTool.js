@@ -8,15 +8,17 @@ fabric.Object.prototype.set({
   selectionColor: '#007cd6',
   hasControls: false,
 })
+const textfill = '#000'
+const selectionStroke = '#38A62E'
 const canvasWidth = 980
 const canvasHeight = 620
 const grid = 25
 const backgroundColor = '#f8f8f8'
 const lineStroke = '#ebebeb'
-const tableFill = 'rgba(150, 111, 51, 0.7)'
+const tableFill = '#fff'
 const tableStroke = '#694d23'
-const chairFill = 'rgba(67, 42, 4, 0.7)'
-const chairStroke = '#32230b'
+const chairFill = '#fff'
+const chairStroke = '#694d23'
 const barFill = 'rgba(0, 93, 127, 0.7)'
 const barStroke = '#003e54'
 const barText = 'Reception'
@@ -67,6 +69,7 @@ export default {
         { name: 'Tom' },
         { name: 'Jerry' },
       ],
+      onDropChair: null,
     }
   },
   mounted() {
@@ -75,16 +78,67 @@ export default {
       height: canvasHeight,
     })
 
-    this.addDefaultObjects()
     this.$nextTick(() => {
       this.canvas.on('mouse:down', (e) => {
         if (e.target) {
-          console.log('an object was clicked! ', e.target)
+          console.log('an object was clicked! ', e.target.type)
+          console.log(
+            'object location left, top===>',
+            e.target.left,
+            e.target.top
+          )
+          const origX = e.pointer.x
+          const origY = e.pointer.y
+          console.log(
+            '🚀 ~ file: seatingTool.js ~ line 90 ~ this.canvas.on ~ origX,origY',
+            origX,
+            origY
+          )
+
+          const grpObjects = e.target._objects
+          console.log(
+            '🚀 ~ file: seatingTool.js ~ line 94 ~ this.canvas.on ~ grpObjects',
+            grpObjects
+          )
         }
       })
-      this.canvas.on('dragover', (e) => {
-        if (e.target) {
-          console.log('an object was clicked! ', e.target)
+      // this.canvas.on('dragenter', (dragEvent) => {
+      //   console.log('dragenter! ', dragEvent)
+      // })
+      this.canvas.on('dragover', (dragEvent) => {
+        if (dragEvent.target) {
+          const o = dragEvent.target
+          if (o.type === 'chair') {
+            this.onDropChair = o
+            this.onDropChair.on('dragenter', (e) => {
+              o.stroke = selectionStroke
+            })
+            this.onDropChair.on('dragover', (e) => {
+              console.log('🚀 dragover this.onDropChair.on ~ e', e)
+              o.stroke = selectionStroke
+              this.canvas.renderAll()
+            })
+            this.onDropChair.on('dragleave', (e) => {
+              console.log('🚀 dragleave this.onDropChair.on ~ e', e)
+              o.stroke = chairStroke
+              this.canvas.renderAll()
+            })
+          }
+          this.ungroupObjects(dragEvent.target)
+        }
+      })
+
+      // this.canvas.on('dragleave', (dragEvent) => {
+      //   console.log('dragleave! ', dragEvent)
+      // })
+      this.canvas.on('drop', (dragEvent) => {
+        if (dragEvent.target) {
+          console.log(
+            'dropped! ',
+            dragEvent.e.layerX,
+            dragEvent.e.layerY,
+            dragEvent.target.type
+          )
         }
       })
     })
@@ -97,7 +151,7 @@ export default {
         height: height,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 2,
+        strokeWidth: 1,
         originX: 'center',
         originY: 'center',
         centeredRotation: true,
@@ -107,7 +161,7 @@ export default {
       const t = new fabric.IText(this.number.toString(), {
         fontFamily: 'Calibri',
         fontSize: 14,
-        fill: '#fff',
+        fill: textfill,
         textAlign: 'center',
         originX: 'center',
         originY: 'center',
@@ -132,7 +186,7 @@ export default {
         radius: radius,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 2,
+        strokeWidth: 1,
 
         originX: 'center',
         originY: 'center',
@@ -141,7 +195,7 @@ export default {
       const t = new fabric.IText(this.number.toString(), {
         fontFamily: 'Calibri',
         fontSize: 14,
-        fill: '#fff',
+        fill: textfill,
         textAlign: 'center',
         originX: 'center',
         originY: 'center',
@@ -168,8 +222,7 @@ export default {
         height: 30,
         fill: chairFill,
         stroke: chairStroke,
-        strokeWidth: 2,
-
+        strokeWidth: 1,
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
@@ -188,7 +241,7 @@ export default {
         height: height,
         fill: barFill,
         stroke: barStroke,
-        strokeWidth: 2,
+        strokeWidth: 1,
 
         originX: 'center',
         originY: 'center',
@@ -198,7 +251,7 @@ export default {
       const t = new fabric.IText(barText, {
         fontFamily: 'Calibri',
         fontSize: 14,
-        fill: '#fff',
+        fill: textfill,
         textAlign: 'center',
         originX: 'center',
         originY: 'center',
@@ -222,7 +275,7 @@ export default {
         height: height,
         fill: wallFill,
         stroke: wallStroke,
-        strokeWidth: 2,
+        strokeWidth: 1,
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
@@ -242,16 +295,14 @@ export default {
       const yo = 100
       const ro = 50
       const rc = ro / 5
-
       var chairs = []
-
       const c = new fabric.Circle({
         left: xo,
         top: yo,
         radius: ro,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 2,
+        strokeWidth: 1,
 
         originX: 'center',
         originY: 'center',
@@ -267,11 +318,11 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 2,
+          strokeWidth: 1,
 
           originX: 'center',
           originY: 'center',
-          selectable: false,
+          selectable: true,
           type: 'chair',
           id: generateId(),
         })
@@ -280,14 +331,14 @@ export default {
       const t = new fabric.IText(this.number.toString(), {
         fontFamily: 'Calibri',
         fontSize: 14,
-        fill: '#fff',
+        fill: textfill,
         textAlign: 'center',
         left: xo,
         top: yo,
         originX: 'center',
         originY: 'center',
       })
-      const g = new fabric.Group([...chairs, c, t], {
+      const g = new fabric.Group([c, ...chairs, t], {
         centeredRotation: true,
         snapAngle: 45,
         selectable: true,
@@ -320,7 +371,7 @@ export default {
         height: ho,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 2,
+        strokeWidth: 1,
 
         originX: 'left',
         originY: 'top',
@@ -338,7 +389,7 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 2,
+          strokeWidth: 1,
 
           originX: 'left',
           originY: 'center',
@@ -353,7 +404,7 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 2,
+          strokeWidth: 1,
 
           originX: 'left',
           originY: 'center',
@@ -366,20 +417,20 @@ export default {
       const t = new fabric.IText(this.number.toString(), {
         fontFamily: 'Calibri',
         fontSize: 14,
-        fill: '#fff',
+        fill: textfill,
         textAlign: 'center',
         left: xo,
         top: yo,
         originX: 'center',
         originY: 'center',
       })
-      const g = new fabric.Group([...chairs, rect, t], {
+      const g = new fabric.Group([rect, ...chairs, t], {
         centeredRotation: true,
         selectable: true,
         type: 'table',
         id: id,
-        subTargetCheck: true,
         number: this.number,
+        subTargetCheck: true,
       })
       this.canvas.add(g)
       this.number++
@@ -407,7 +458,7 @@ export default {
         height: ho,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 2,
+        strokeWidth: 1,
 
         originX: 'left',
         originY: 'top',
@@ -424,11 +475,11 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 2,
+          strokeWidth: 1,
 
           originX: 'left',
           originY: 'center',
-          selectable: false,
+          selectable: true,
           type: 'chair',
           id: generateId(),
         })
@@ -437,14 +488,14 @@ export default {
       const t = new fabric.IText(this.number.toString(), {
         fontFamily: 'Calibri',
         fontSize: 14,
-        fill: '#fff',
+        fill: textfill,
         textAlign: 'center',
         left: xo,
         top: yo,
         originX: 'center',
         originY: 'center',
       })
-      const g = new fabric.Group([...chairs, rect, t], {
+      const g = new fabric.Group([rect, ...chairs, t], {
         centeredRotation: true,
         selectable: true,
         type: 'table',
@@ -475,7 +526,7 @@ export default {
         height: ho,
         fill: tableFill,
         stroke: tableStroke,
-        strokeWidth: 2,
+        strokeWidth: 1,
 
         originX: 'center',
         originY: 'center',
@@ -491,11 +542,10 @@ export default {
           radius: rc,
           fill: chairFill,
           stroke: chairStroke,
-          strokeWidth: 2,
-
+          strokeWidth: 1,
           originX: 'center',
           originY: 'center',
-          selectable: false,
+          selectable: true,
           type: 'chair',
           id: generateId(),
         })
@@ -504,14 +554,14 @@ export default {
       const t = new fabric.IText(this.number.toString(), {
         fontFamily: 'Calibri',
         fontSize: 14,
-        fill: '#fff',
+        fill: textfill,
         textAlign: 'center',
         left: xo,
         top: yo,
         originX: 'center',
         originY: 'center',
       })
-      const g = new fabric.Group([...chairs, rect, t], {
+      const g = new fabric.Group([rect, ...chairs, t], {
         centeredRotation: true,
         selectable: true,
         type: 'table',
@@ -521,60 +571,10 @@ export default {
       this.canvas.add(g)
       this.number++
     },
-    addDefaultObjects() {
-      this.addChair(15, 105)
-      this.addChair(15, 135)
-      this.addChair(75, 105)
-      this.addChair(75, 135)
-      this.addChair(225, 75)
-      this.addChair(255, 75)
-      this.addChair(225, 135)
-      this.addChair(255, 135)
-      this.addChair(225, 195)
-      this.addChair(255, 195)
-      this.addChair(225, 255)
-      this.addChair(255, 255)
-      this.addChair(15, 195)
-      this.addChair(45, 195)
-      this.addChair(15, 255)
-      this.addChair(45, 255)
-      this.addChair(15, 315)
-      this.addChair(45, 315)
-      this.addChair(15, 375)
-      this.addChair(45, 375)
-      this.addChair(225, 315)
-      this.addChair(255, 315)
-      this.addChair(225, 375)
-      this.addChair(255, 375)
-      this.addChair(15, 435)
-      this.addChair(15, 495)
-      this.addChair(15, 555)
-      this.addChair(15, 615)
-      this.addChair(225, 615)
-      this.addChair(255, 615)
-      this.addChair(195, 495)
-      this.addChair(195, 525)
-      this.addChair(255, 495)
-      this.addChair(255, 525)
-      this.addChair(225, 675)
-      this.addChair(255, 675)
 
-      this.addRect(0, 90, 90, 60)
-      this.addRect(210, 90, 90, 60)
-      this.addRect(210, 210, 90, 60)
-      this.addRect(0, 210, 90, 60)
-      this.addRect(0, 330, 90, 60)
-      this.addRect(210, 330, 90, 60)
-      this.addRect(0, 450, 60, 60)
-      this.addRect(0, 570, 60, 60)
-      this.addRect(210, 480, 60, 90)
-      this.addRect(210, 630, 90, 60)
-      this.addBar(120, 0, 180, 60)
-      this.addWall(120, 510, 60, 60)
-    },
     remove() {
       const o = this.canvas.getActiveObject()
-      
+
       if (o) {
         // o.remove()
         this.canvas.remove(o)
@@ -634,6 +634,16 @@ export default {
           this.dialog = false
 
           break
+      }
+    },
+    ungroupObjects(group) {
+      if (group._objects && group._objects.length) {
+        const items = group._objects
+        this.canvas.remove(group)
+        for (let i = 0; i < items.length; i++) {
+          this.canvas.add(items[i])
+        }
+        this.canvas.renderAll()
       }
     },
   },
