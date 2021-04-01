@@ -115,7 +115,7 @@ export default {
               this.regroupObjects()
             })
           }
-          // this.ungroupObjects(dragEvent.target)
+          this.ungroupObjects(dragEvent.target)
         }
       })
 
