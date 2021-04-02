@@ -82,8 +82,6 @@ export default {
         { name: 'Tom' },
         { name: 'Jerry' },
       ],
-      onDropChair: null,
-      onDropTable: null,
     }
   },
   mounted() {
@@ -91,43 +89,6 @@ export default {
       width: canvasWidth,
       height: canvasHeight,
     })
-
-    // this.$nextTick(() => {
-    //   this.canvas.on('dragover', (dragEvent) => {
-    //     if (dragEvent.target) {
-    //       const o = dragEvent.target
-    //       console.log(
-    //         '🚀 ~ file: seatingTool.js ~ line 96 ~ this.canvas.on ~ o',
-    //         o.type
-    //       )
-    //       if (o.type === 'chair') {
-    //         this.onDropChair = o
-    //         this.onDropChair.on('dragenter', (e) => {
-    //           o.stroke = selectionStroke
-    //           o.strokeWidth = selectionStrokeWidth
-    //           this.canvas.renderAll()
-    //         })
-    //         this.onDropChair.on('dragover', (e) => {
-    //           o.stroke = selectionStroke
-    //           o.strokeWidth = selectionStrokeWidth
-    //           this.canvas.renderAll()
-    //         })
-    //         this.onDropChair.on('dragleave', (e) => {
-    //           o.stroke = chairStroke
-    //           o.strokeWidth = objectStrokeWidth
-    //           this.regroupObjects()
-    //         })
-    //       }
-    //       this.ungroupObjects(dragEvent.target)
-    //     }
-    //   })
-
-    //   this.canvas.on('drop', (dragEvent) => {
-    //     if (dragEvent) {
-    //       console.log('dropped! ', dragEvent)
-    //     }
-    //   })
-    // })
   },
   methods: {
     addRect(left, top, width, height) {
@@ -218,7 +179,6 @@ export default {
         id: generateId(),
       })
       this.canvas.add(o)
-
       return o
     },
     addBar(left, top, width, height) {
@@ -631,31 +591,6 @@ export default {
           this.dialog = false
 
           break
-      }
-    },
-    ungroupObjects(group) {
-      if (group._objects && group._objects.length) {
-        this.onDropTable = group
-        const items = group._objects
-        this.canvas.remove(group)
-        for (let i = 0; i < items.length; i++) {
-          this.canvas.add(items[i])
-        }
-        this.canvas.renderAll()
-      }
-    },
-    regroupObjects() {
-      if (this.onDropTable._objects && this.onDropTable._objects.length) {
-        const objects = this.canvas.getObjects()
-        const existingTables = objects.filter(
-          (el) => el.id === this.onDropTable.id
-        )
-
-        if (!existingTables.length) {
-          this.canvas.add(this.onDropTable)
-          this.canvas.renderAll()
-          console.log('regrouped')
-        }
       }
     },
     addDragDropEvents(chair) {
