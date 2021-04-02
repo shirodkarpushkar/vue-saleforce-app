@@ -328,12 +328,7 @@ export default {
           type: 'chair',
           id: generateId(),
         })
-        chair.on('dragover', (e) => {
-          console.log(
-            '🚀 ~ file: seatingTool.js ~ line 313 ~ chair.on ~ e',
-            e.target
-          )
-        })
+        chair.on('dragover', (e) => {})
         chairs.push(chair)
       }
       const g = [...chairs, c]
@@ -369,6 +364,23 @@ export default {
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
+      })
+      const t = new fabric.IText(this.number.toString(), {
+        fontFamily: 'Calibri',
+        fontSize: 14,
+        fill: textfill,
+        textAlign: 'center',
+        left: xo,
+        top: yo,
+        originX: 'center',
+        originY: 'center',
+      })
+      const c = new fabric.Group([rect, t], {
+        centeredRotation: true,
+        selectable: true,
+        type: 'table',
+        id: id,
+        number: this.number,
       })
 
       for (let i = 0; i < n; i++) {
@@ -407,25 +419,10 @@ export default {
         })
         chairs.push(chairBottom)
       }
-      const t = new fabric.IText(this.number.toString(), {
-        fontFamily: 'Calibri',
-        fontSize: 14,
-        fill: textfill,
-        textAlign: 'center',
-        left: xo,
-        top: yo,
-        originX: 'center',
-        originY: 'center',
-      })
-      const g = new fabric.Group([rect, ...chairs, t], {
-        centeredRotation: true,
-        selectable: true,
-        type: 'table',
-        id: id,
-        number: this.number,
-        subTargetCheck: true,
-      })
-      this.canvas.add(g)
+      const g = [...chairs, c]
+      setParentChildRelationship(c, chairs)
+      c.on('moving', (e) => moveChildren(c, chairs))
+      this.canvas.add(...g)
       this.number++
     },
     addRectTblOneSided(chairNumber) {
@@ -456,7 +453,23 @@ export default {
         originY: 'top',
         centeredRotation: true,
       })
-
+      const t = new fabric.IText(this.number.toString(), {
+        fontFamily: 'Calibri',
+        fontSize: 14,
+        fill: textfill,
+        textAlign: 'center',
+        left: xo,
+        top: yo,
+        originX: 'center',
+        originY: 'center',
+      })
+      const c = new fabric.Group([rect, t], {
+        centeredRotation: true,
+        selectable: true,
+        type: 'table',
+        id: id,
+        number: this.number,
+      })
       for (let i = 0; i < n; i++) {
         const x = x1 + (i + 1) * delta + 2 * i * rc
         const y = y1
@@ -471,30 +484,17 @@ export default {
 
           originX: 'left',
           originY: 'center',
-          selectable: true,
+          selectable: false,
           type: 'chair',
           id: generateId(),
         })
         chairs.push(chairTop)
       }
-      const t = new fabric.IText(this.number.toString(), {
-        fontFamily: 'Calibri',
-        fontSize: 14,
-        fill: textfill,
-        textAlign: 'center',
-        left: xo,
-        top: yo,
-        originX: 'center',
-        originY: 'center',
-      })
-      const g = new fabric.Group([rect, ...chairs, t], {
-        centeredRotation: true,
-        selectable: true,
-        type: 'table',
-        id: id,
-        number: this.number,
-      })
-      this.canvas.add(g)
+
+      const g = [...chairs, c]
+      setParentChildRelationship(c, chairs)
+      c.on('moving', (e) => moveChildren(c, chairs))
+      this.canvas.add(...g)
       this.number++
     },
     addSqaureTbl(chairNumber) {
@@ -524,6 +524,23 @@ export default {
         originY: 'center',
         centeredRotation: true,
       })
+      const t = new fabric.IText(this.number.toString(), {
+        fontFamily: 'Calibri',
+        fontSize: 14,
+        fill: textfill,
+        textAlign: 'center',
+        left: xo,
+        top: yo,
+        originX: 'center',
+        originY: 'center',
+      })
+      const c = new fabric.Group([rect, t], {
+        centeredRotation: true,
+        selectable: true,
+        type: 'table',
+        id: id,
+        number: this.number,
+      })
 
       for (let i = 0; i < n; i++) {
         const x = xo + ro * Math.cos(i * theta)
@@ -543,24 +560,11 @@ export default {
         })
         chairs.push(chair)
       }
-      const t = new fabric.IText(this.number.toString(), {
-        fontFamily: 'Calibri',
-        fontSize: 14,
-        fill: textfill,
-        textAlign: 'center',
-        left: xo,
-        top: yo,
-        originX: 'center',
-        originY: 'center',
-      })
-      const g = new fabric.Group([rect, ...chairs, t], {
-        centeredRotation: true,
-        selectable: true,
-        type: 'table',
-        id: id,
-        number: this.number,
-      })
-      this.canvas.add(g)
+      
+      const g = [...chairs, c]
+      setParentChildRelationship(c, chairs)
+      c.on('moving', (e) => moveChildren(c, chairs))
+      this.canvas.add(...g)
       this.number++
     },
 
