@@ -328,7 +328,7 @@ export default {
           type: 'chair',
           id: generateId(),
         })
-        chair.on('dragover', (e) => {})
+        this.addDragDropEvents(chair)
         chairs.push(chair)
       }
       const g = [...chairs, c]
@@ -395,13 +395,13 @@ export default {
           fill: chairFill,
           stroke: chairStroke,
           strokeWidth: objectStrokeWidth,
-
           originX: 'left',
           originY: 'center',
-          selectable: true,
+          selectable: false,
           type: 'chair',
           id: generateId(),
         })
+        this.addDragDropEvents(chairTop)
         chairs.push(chairTop)
         const chairBottom = new fabric.Circle({
           left: x,
@@ -410,13 +410,13 @@ export default {
           fill: chairFill,
           stroke: chairStroke,
           strokeWidth: objectStrokeWidth,
-
           originX: 'left',
           originY: 'center',
-          selectable: true,
+          selectable: false,
           type: 'chair',
           id: generateId(),
         })
+        this.addDragDropEvents(chairBottom)
         chairs.push(chairBottom)
       }
       const g = [...chairs, c]
@@ -488,6 +488,7 @@ export default {
           type: 'chair',
           id: generateId(),
         })
+        this.addDragDropEvents(chairTop)
         chairs.push(chairTop)
       }
 
@@ -558,16 +559,16 @@ export default {
           type: 'chair',
           id: generateId(),
         })
+        this.addDragDropEvents(chair)
         chairs.push(chair)
       }
-      
+
       const g = [...chairs, c]
       setParentChildRelationship(c, chairs)
       c.on('moving', (e) => moveChildren(c, chairs))
       this.canvas.add(...g)
       this.number++
     },
-
     remove() {
       const o = this.canvas.getActiveObject()
 
@@ -656,6 +657,36 @@ export default {
           console.log('regrouped')
         }
       }
+    },
+    addDragDropEvents(chair) {
+      chair.on('dragenter', this.chairDragEnterEvent)
+      chair.on('dragover', this.chairDragOverEvent)
+      chair.on('dragleave', this.chairDragLeaveEvent)
+      chair.on('drop', this.chairDropEvent)
+    },
+    chairDragEnterEvent(e) {
+      const o = e.target
+      o.set('stroke', selectionStroke)
+      o.set('strokeWidth', selectionStrokeWidth)
+      this.canvas.renderAll()
+    },
+    chairDragOverEvent(e) {
+      const o = e.target
+      o.set('stroke', selectionStroke)
+      o.set('strokeWidth', selectionStrokeWidth)
+      this.canvas.renderAll()
+    },
+    chairDragLeaveEvent(e) {
+      const o = e.target
+      o.set('stroke', chairStroke)
+      o.set('strokeWidth', objectStrokeWidth)
+      this.canvas.renderAll()
+    },
+    chairDropEvent(e) {
+      const o = e.target
+      o.set('stroke', chairStroke)
+      o.set('strokeWidth', objectStrokeWidth)
+      this.canvas.renderAll()
     },
   },
 }
