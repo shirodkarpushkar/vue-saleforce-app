@@ -33,7 +33,7 @@
                   :key="`guest-${i}}`"
 
                 >
-                <v-list-item-icon :draggable="true">
+                <v-list-item-icon :draggable="true" @dragstart="setDragStartData(item)">
                   <v-img src="@assets/images/man.svg" width="20"></v-img>
                 </v-list-item-icon>
                   <v-list-item-title>

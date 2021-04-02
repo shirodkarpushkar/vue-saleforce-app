@@ -82,6 +82,7 @@ export default {
         { name: 'Tom' },
         { name: 'Jerry' },
       ],
+      draggedItem: null,
     }
   },
   mounted() {
@@ -622,6 +623,9 @@ export default {
       o.set('stroke', chairStroke)
       o.set('strokeWidth', objectStrokeWidth)
       this.canvas.renderAll()
+    },
+    setDragStartData(item) {
+      this.draggedItem = item
     },
   },
 }
