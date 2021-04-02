@@ -8,6 +8,9 @@ fabric.Object.prototype.set({
   selectionColor: '#007cd6',
   hasControls: false,
 })
+const multiply = fabric.util.multiplyTransformMatrices
+const invert = fabric.util.invertTransform
+const decompose = fabric.util.qrDecompose
 
 const textfill = '#000'
 
@@ -89,42 +92,42 @@ export default {
       height: canvasHeight,
     })
 
-    this.$nextTick(() => {
-      this.canvas.on('dragover', (dragEvent) => {
-        if (dragEvent.target) {
-          const o = dragEvent.target
-          console.log(
-            '🚀 ~ file: seatingTool.js ~ line 96 ~ this.canvas.on ~ o',
-            o.type
-          )
-          if (o.type === 'chair') {
-            this.onDropChair = o
-            this.onDropChair.on('dragenter', (e) => {
-              o.stroke = selectionStroke
-              o.strokeWidth = selectionStrokeWidth
-              this.canvas.renderAll()
-            })
-            this.onDropChair.on('dragover', (e) => {
-              o.stroke = selectionStroke
-              o.strokeWidth = selectionStrokeWidth
-              this.canvas.renderAll()
-            })
-            this.onDropChair.on('dragleave', (e) => {
-              o.stroke = chairStroke
-              o.strokeWidth = objectStrokeWidth
-              this.regroupObjects()
-            })
-          }
-          this.ungroupObjects(dragEvent.target)
-        }
-      })
+    // this.$nextTick(() => {
+    //   this.canvas.on('dragover', (dragEvent) => {
+    //     if (dragEvent.target) {
+    //       const o = dragEvent.target
+    //       console.log(
+    //         '🚀 ~ file: seatingTool.js ~ line 96 ~ this.canvas.on ~ o',
+    //         o.type
+    //       )
+    //       if (o.type === 'chair') {
+    //         this.onDropChair = o
+    //         this.onDropChair.on('dragenter', (e) => {
+    //           o.stroke = selectionStroke
+    //           o.strokeWidth = selectionStrokeWidth
+    //           this.canvas.renderAll()
+    //         })
+    //         this.onDropChair.on('dragover', (e) => {
+    //           o.stroke = selectionStroke
+    //           o.strokeWidth = selectionStrokeWidth
+    //           this.canvas.renderAll()
+    //         })
+    //         this.onDropChair.on('dragleave', (e) => {
+    //           o.stroke = chairStroke
+    //           o.strokeWidth = objectStrokeWidth
+    //           this.regroupObjects()
+    //         })
+    //       }
+    //       this.ungroupObjects(dragEvent.target)
+    //     }
+    //   })
 
-      this.canvas.on('drop', (dragEvent) => {
-        if (dragEvent) {
-          console.log('dropped! ', dragEvent)
-        }
-      })
-    })
+    //   this.canvas.on('drop', (dragEvent) => {
+    //     if (dragEvent) {
+    //       console.log('dropped! ', dragEvent)
+    //     }
+    //   })
+    // })
   },
   methods: {
     addRect(left, top, width, height) {
@@ -279,17 +282,34 @@ export default {
       const ro = 50
       const rc = chairRadius
       var chairs = []
-      const c = new fabric.Circle({
+      const table = new fabric.Circle({
         left: xo,
         top: yo,
         radius: ro,
         fill: tableFill,
         stroke: tableStroke,
         strokeWidth: objectStrokeWidth,
-
         originX: 'center',
         originY: 'center',
         centeredRotation: true,
+      })
+      const text = new fabric.IText(this.number.toString(), {
+        fontFamily: 'Calibri',
+        fontSize: 14,
+        fill: textfill,
+        textAlign: 'center',
+        left: xo,
+        top: yo,
+        originX: 'center',
+        originY: 'center',
+      })
+      const c = new fabric.Group([table, text], {
+        centeredRotation: true,
+        snapAngle: 45,
+        selectable: true,
+        type: 'table',
+        id: id,
+        number: this.number,
       })
 
       for (let i = 0; i < n; i++) {
@@ -302,34 +322,24 @@ export default {
           fill: chairFill,
           stroke: chairStroke,
           strokeWidth: objectStrokeWidth,
-
           originX: 'center',
           originY: 'center',
-          selectable: true,
+          selectable: false,
           type: 'chair',
           id: generateId(),
         })
+        chair.on('dragover', (e) => {
+          console.log(
+            '🚀 ~ file: seatingTool.js ~ line 313 ~ chair.on ~ e',
+            e.target
+          )
+        })
         chairs.push(chair)
       }
-      const t = new fabric.IText(this.number.toString(), {
-        fontFamily: 'Calibri',
-        fontSize: 14,
-        fill: textfill,
-        textAlign: 'center',
-        left: xo,
-        top: yo,
-        originX: 'center',
-        originY: 'center',
-      })
-      const g = new fabric.Group([c, ...chairs, t], {
-        centeredRotation: true,
-        snapAngle: 45,
-        selectable: true,
-        type: 'table',
-        id: id,
-        number: this.number,
-      })
-      this.canvas.add(g)
+      const g = [...chairs, c]
+      setParentChildRelationship(c, chairs)
+      c.on('moving', (e) => moveChildren(c, chairs))
+      this.canvas.add(...g)
       this.number++
     },
     addRectTbltwoSided(chairNumber) {
@@ -650,4 +660,37 @@ function generateId() {
   return Math.random()
     .toString(36)
     .substr(2, 8)
+}
+
+function setParentChildRelationship(parent, childrens) {
+  var bossTransform = parent.calcTransformMatrix()
+  var invertedBossTransform = invert(bossTransform)
+  childrens.forEach((o) => {
+    var desiredTransform = multiply(
+      invertedBossTransform,
+      o.calcTransformMatrix()
+    )
+    o.relationship = desiredTransform
+  })
+}
+function moveChildren(parent, children) {
+  children.forEach((el) => {
+    if (!el.relationship) {
+      return
+    }
+    var relationship = el.relationship
+    var newTransform = multiply(parent.calcTransformMatrix(), relationship)
+    const opt = decompose(newTransform)
+    el.set({
+      flipX: false,
+      flipY: false,
+    })
+    el.setPositionByOrigin(
+      { x: opt.translateX, y: opt.translateY },
+      'center',
+      'center'
+    )
+    el.set(opt)
+    el.setCoords()
+  })
 }
