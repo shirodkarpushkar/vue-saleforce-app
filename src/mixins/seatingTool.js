@@ -7,6 +7,7 @@ fabric.Object.prototype.set({
   cornerSize: 2,
   selectionColor: '#007cd6',
   hasControls: false,
+  preserveObjectStacking:true
 })
 const multiply = fabric.util.multiplyTransformMatrices
 const invert = fabric.util.invertTransform
@@ -619,9 +620,30 @@ export default {
       this.canvas.renderAll()
     },
     chairDropEvent(e) {
-      const o = e.target
-      o.set('stroke', chairStroke)
-      o.set('strokeWidth', objectStrokeWidth)
+      const chair = e.target
+      chair.set('stroke', chairStroke)
+      chair.set('strokeWidth', objectStrokeWidth)
+
+      const guest = new fabric.IText(this.draggedItem.name, {
+        fontFamily: 'Calibri',
+        fontSize: 14,
+        fill: textfill,
+        textAlign: 'center',
+        originX: 'left',
+        originY: 'top',
+        left: chair.left,
+        top: chair.top,
+        type: 'guest',
+      })
+      const parent = this.canvas
+        .getObjects()
+        .find((el) => el.id === chair.parent_id)
+      console.log("🚀 ~ file: seatingTool.js ~ line 640 ~ chairDropEvent ~ parent", parent)
+
+      setParentChildRelationship(parent, [guest])
+    parent.on('moving', (e) => moveChildren(parent, [guest]))
+      this.canvas.add(guest)
+      this.canvas.bringToFront(guest)
       this.canvas.renderAll()
     },
     setDragStartData(item) {
@@ -644,10 +666,18 @@ function setParentChildRelationship(parent, childrens) {
       invertedBossTransform,
       o.calcTransformMatrix()
     )
-    o.relationship = desiredTransform
+
+    o.set('relationship', desiredTransform)
+    o.set('parent_id', parent.id)
   })
 }
 function moveChildren(parent, children) {
+  if (parent.type === 'chair') {
+    console.log(
+      '🚀 ~ file: seatingTool.js ~ line 680 ~ moveChildren ~ children',
+      children
+    )
+  }
   children.forEach((el) => {
     if (!el.relationship) {
       return
