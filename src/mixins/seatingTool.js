@@ -7,7 +7,7 @@ fabric.Object.prototype.set({
   cornerSize: 2,
   selectionColor: '#007cd6',
   hasControls: false,
-  preserveObjectStacking:true
+  preserveObjectStacking: true,
 })
 const multiply = fabric.util.multiplyTransformMatrices
 const invert = fabric.util.invertTransform
@@ -293,7 +293,7 @@ export default {
         this.addDragDropEvents(chair)
         chairs.push(chair)
       }
-      const g = [...chairs, c]
+      const g = [c, ...chairs]
       setParentChildRelationship(c, chairs)
       c.on('moving', (e) => moveChildren(c, chairs))
       this.canvas.add(...g)
@@ -381,7 +381,7 @@ export default {
         this.addDragDropEvents(chairBottom)
         chairs.push(chairBottom)
       }
-      const g = [...chairs, c]
+      const g = [c, ...chairs]
       setParentChildRelationship(c, chairs)
       c.on('moving', (e) => moveChildren(c, chairs))
       this.canvas.add(...g)
@@ -454,7 +454,7 @@ export default {
         chairs.push(chairTop)
       }
 
-      const g = [...chairs, c]
+      const g = [c, ...chairs]
       setParentChildRelationship(c, chairs)
       c.on('moving', (e) => moveChildren(c, chairs))
       this.canvas.add(...g)
@@ -525,7 +525,7 @@ export default {
         chairs.push(chair)
       }
 
-      const g = [...chairs, c]
+      const g = [c, ...chairs]
       setParentChildRelationship(c, chairs)
       c.on('moving', (e) => moveChildren(c, chairs))
       this.canvas.add(...g)
@@ -630,7 +630,7 @@ export default {
         fill: textfill,
         textAlign: 'center',
         originX: 'left',
-        originY: 'top',
+        originY: 'center',
         left: chair.left,
         top: chair.top,
         type: 'guest',
@@ -638,10 +638,13 @@ export default {
       const parent = this.canvas
         .getObjects()
         .find((el) => el.id === chair.parent_id)
-      console.log("🚀 ~ file: seatingTool.js ~ line 640 ~ chairDropEvent ~ parent", parent)
+      console.log(
+        '🚀 ~ file: seatingTool.js ~ line 640 ~ chairDropEvent ~ parent',
+        parent
+      )
 
       setParentChildRelationship(parent, [guest])
-    parent.on('moving', (e) => moveChildren(parent, [guest]))
+      parent.on('moving', (e) => moveChildren(parent, [guest]))
       this.canvas.add(guest)
       this.canvas.bringToFront(guest)
       this.canvas.renderAll()
